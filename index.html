@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Yiddish: Library of Congress to YIVO</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+
+<body>
+  <div id="wrapper">
+
+    <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <h1>Yiddish: Library of Congress to YIVO</h1>
+        <p>Author: <a href="https://wp.nyu.edu/ibleaman" target="_blank">Isaac L. Bleaman</a></p>
+				<p>This program takes in Yiddish titles formatting according to <a href="https://www.loc.gov/catdir/cpso/romanization/hebrew.pdf">the guidelines of the Library of Congress</a>
+					and outputs a version that is compliant with the YIVO style recommended by Bleaman (in prep). It also removes a few other undesirable formatting issues (e.g., multiple spaces in a row).</p>
+				<p>Be sure to double-check the output (spelling, capitalization, etc.). For example, you will need to capitalize the names and titles of individuals.</p>
+				<p>For example:<br><span style="font-weight: bold;">Di Yidishe folḳsshafung : seperaṭer opdruḳ fun dem pedagogishn ḥoydesh-zshurnal Di naye shul</span><br>... becomes ...<br><span style="font-weight: bold;">Di yidishe folksshafung: seperater opdruk fun dem pedagogishn khoydesh-zhurnal di naye shul</span>
+				<br>(After conversion, the second "Di" needs to be capitalized by hand because it is an embedded title: Di naye shul.)</p>
+
+        <div class="row">
+          <div class="col-6">
+            <form class="form" role="form" id="user_input">
+                <label for="loc_input" style="font-weight: bold;">In LOC format:</label>
+								<br>
+								<textarea class="form-control" id="loc_input"></textarea>
+								<br />
+								<div class="form-group">
+	                <a class="btn btn-primary" style="color: white;" onclick="loc_strip_formatting()">LOC → YIVO</a>
+	              </div>
+            </form>
+          </div>
+
+          <div class="col-6">
+            <label for="normal_output" style="font-weight: bold;">In citation format:</label>
+            <textarea class="form-control" id="result" readonly style="color:white; background-color: gray; white-space: pre-wrap;"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOC de-formatting JavaScript -->
+  <script>
+		function loc_strip_formatting() {
+			var loc = document.getElementById('loc_input').value;
+
+			// remove all capital letters
+			var output = loc.toLowerCase();
+
+			// remove dots from characters with dots
+			var dots = {
+			  "ạ": "a",
+				"ḅ": "b",
+				"ḍ": "d",
+				"kḥ": "kh",
+				"ḥ": "kh",
+				"ḳ": "k",
+				"ḷ": "l",
+				"ṃ": "m",
+				"ṇ": "n",
+				"ṛ": "r",
+				"ṣ": "s",
+				"ṭ": "t",
+				"ṿ": "v",
+				"ẉ": "w",
+				"ẓ": "z"
+			};
+			for (var key in dots) {
+				var letter_with_dot = new RegExp(key, "g");
+				output = output.replace(letter_with_dot, dots[key]);
+			}
+			// remove any dots if they are separate unicode chars
+			output = output.replace(/̣/g, '');
+
+			// change "zsh" to "zh"
+			output = output.replace(/zsh/g, 'zh');
+
+			// remove ʼ and ʻ
+			output = output.replace(/[ʼʻ]/g, '');
+
+			// capitalize first letter
+			output = output.charAt(0).toUpperCase() + output.slice(1);
+
+			// remove sequences of multiple spaces
+			output = output.replace(/[ ]+/g, ' ');
+
+			// remove spaces before colon or semicolon
+			output = output.replace(/ +([:;])/g, "$1");
+
+			// done; return string
+			document.getElementById('result').innerHTML = output;
+		}
+	</script>
+
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
