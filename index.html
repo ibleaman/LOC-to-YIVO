@@ -81,6 +81,10 @@
 			// remove ʼ and ʻ
 			output = output.replace(/[ʼʻ]/g, '');
 
+			// replace ś and with s, and remove the diacritic over s̀
+			output = output.replace(/ś/g, 's');
+			output = output.replace(/̀/g, '');
+
 			// capitalize first letter
 			output = output.charAt(0).toUpperCase() + output.slice(1);
 
