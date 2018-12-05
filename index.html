@@ -55,9 +55,13 @@
   <script>
 		function loc_strip_formatting() {
 			var loc = document.getElementById('loc_input').value;
+			
 
 			// remove all capital letters
 			var output = loc.toLowerCase();
+			
+			// remove leading and trailing spaces
+			output = output.replace(/^ +| +$/g, '');
 
 			// remove dots from characters with dots
 			var dots = {
