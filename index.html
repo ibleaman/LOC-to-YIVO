@@ -93,8 +93,8 @@
 			// change "zsh" to "zh"
 			output = output.replace(/zsh/g, 'zh');
 
-			// remove ʼ and ʻ
-			output = output.replace(/[ʼʻ]/g, '');
+			// remove ʼ and ʻ and ʹ
+			output = output.replace(/[ʼʻʹ]/g, '');
 
 			// replace ś and with s, and remove the diacritic over s̀
 			output = output.replace(/ś/g, 's');
